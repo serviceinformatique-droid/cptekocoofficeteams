@@ -249,7 +249,6 @@ export function executeSynchronization(
   existingAccounts: UserAccount[],
   licenses: M365License[],
   config: TenantConfig,
-  isSimulation: boolean,
   operatorRole: UserRole,
   fileNames: string[]
 ): {
@@ -284,44 +283,6 @@ export function executeSynchronization(
 
   for (const item of selectedItems) {
     const isEleve = item.userType === 'eleve';
-
-    // In simulation mode, no mutations to real or state accounts, only recording simulation
-    if (isSimulation) {
-      if (item.action === 'creation') {
-        if (isEleve) createdEleves++;
-        else createdProfs++;
-        logs.push({
-          id: `sim-${item.id}`,
-          timestamp,
-          userEmail: item.email,
-          userName: item.displayName,
-          userType: item.userType,
-          action: 'Simulation : Création de compte',
-          newLicence: item.newLicenceName,
-          status: 'success',
-          message: `[SIMULATION] Le compte ${item.email} serait créé avec la licence ${item.newLicenceName} et ajouté à ${item.newGroup}.`,
-        });
-      } else if (item.action === 'aucun') {
-        if (isEleve) unchangedEleves++;
-        else unchangedProfs++;
-      } else {
-        if (isEleve) modifiedEleves++;
-        else modifiedProfs++;
-        logs.push({
-          id: `sim-${item.id}`,
-          timestamp,
-          userEmail: item.email,
-          userName: item.displayName,
-          userType: item.userType,
-          action: 'Simulation : Mise à jour',
-          oldLicence: item.oldLicenceName,
-          newLicence: item.newLicenceName,
-          status: 'success',
-          message: `[SIMULATION] ${item.changesDescription.join(' ; ')}`,
-        });
-      }
-      continue;
-    }
 
     // REAL / ACTIVE EXECUTION
     try {
@@ -483,7 +444,6 @@ export function executeSynchronization(
   const syncRecord: SynchronizationRecord = {
     id: `sync-${Date.now()}`,
     date: timestamp,
-    isSimulation,
     operatorRole,
     operatorName: operatorRole === 'admin' ? 'Administrateur Informatique' : 'Opérateur',
     filesProcessed: fileNames,

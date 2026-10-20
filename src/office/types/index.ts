@@ -135,7 +135,6 @@ export interface SyncLogItem {
 export interface SynchronizationRecord {
   id: string;
   date: string;
-  isSimulation: boolean;
   operatorRole: UserRole;
   operatorName: string;
   stats: SyncStats;

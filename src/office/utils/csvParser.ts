@@ -137,14 +137,12 @@ export function generateCsvTemplate(_type: UserType): string {
 // Export Synchronization report to CSV
 export function exportReportToCsv(
   items: PreviewItem[],
-  stats: SyncStats,
-  isSimulation: boolean
+  stats: SyncStats
 ): string {
   const bom = '\uFEFF'; // UTF-8 BOM for Excel compatibility
   let csv = bom;
   csv += `RAPPORT DE SYNCHRONISATION MICROSOFT 365\r\n`;
   csv += `Date d'export :;${new Date().toLocaleString('fr-FR')}\r\n`;
-  csv += `Mode :;${isSimulation ? 'SIMULATION (Aucune modification effectuée)' : 'PRODUCTION (Modifications appliquées)'}\r\n`;
   csv += `Total traités :;${stats.totalProcessed}\r\n`;
   csv += `Créations :;${stats.totalCreated}\r\n`;
   csv += `Modifications :;${stats.totalModified}\r\n`;
@@ -180,8 +178,7 @@ export function exportReportToCsv(
 // Export to HTML / XML table easily opened by Microsoft Excel
 export function exportReportToExcelXml(
   items: PreviewItem[],
-  stats: SyncStats,
-  isSimulation: boolean
+  stats: SyncStats
 ): string {
   const rows = items
     .map(
@@ -223,9 +220,7 @@ export function exportReportToExcelXml(
     </head>
     <body>
       <h2>Rapport de synchronisation Microsoft 365 - Établissement Scolaire</h2>
-      <p><b>Date :</b> ${new Date().toLocaleString('fr-FR')} | <b>Mode :</b> ${
-    isSimulation ? 'SIMULATION' : 'PRODUCTION'
-  }</p>
+      <p><b>Date :</b> ${new Date().toLocaleString('fr-FR')}</p>
       <p><b>Statistiques :</b> Total: ${stats.totalProcessed} | Créations: ${
     stats.totalCreated
   } | Modifications: ${stats.totalModified} | Conformes: ${stats.totalUnchanged} | Erreurs: ${

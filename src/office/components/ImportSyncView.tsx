@@ -82,8 +82,7 @@ export const ImportSyncView: React.FC<ImportSyncViewProps> = ({
   const [ignoreErrors, setIgnoreErrors] = useState<boolean>(false);
   const [validationFilter, setValidationFilter] = useState<'all' | 'errors' | 'valid'>('all');
 
-  // Preview & Simulation States
-  const [isSimulation, setIsSimulation] = useState<boolean>(false);
+  // Preview States
   const [previewItems, setPreviewItems] = useState<PreviewItem[]>([]);
   const [previewFilter, setPreviewFilter] = useState<string>('all');
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
@@ -248,13 +247,12 @@ export const ImportSyncView: React.FC<ImportSyncViewProps> = ({
       accounts,
       licenses,
       tenantConfig,
-      isSimulation,
       userRole,
       fileNames
     );
 
-    // If REAL sync (not simulation), call Microsoft Graph API for each account
-    if (!isSimulation && totalSelected > 0) {
+    // Appels Microsoft Graph pour chaque compte
+    if (totalSelected > 0) {
       let processedCount = 0;
       for (const item of selectedItems) {
         if (
@@ -320,10 +318,6 @@ export const ImportSyncView: React.FC<ImportSyncViewProps> = ({
         processedCount++;
         setExecutionProgress(Math.round(15 + (processedCount / totalSelected) * 80));
       }
-    } else {
-      // Simulation mode
-      setExecutionProgress(50);
-      await new Promise((r) => setTimeout(r, 600));
     }
 
     setExecutionProgress(100);
@@ -829,55 +823,6 @@ export const ImportSyncView: React.FC<ImportSyncViewProps> = ({
       {/* ========================================================================= */}
       {step === 'preview' && (
         <div className="space-y-6 animate-fadeIn">
-          {/* Mode SIMULATION Banner (Section 30) */}
-          <div
-            className={`border rounded-xl p-5 transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm ${
-              isSimulation
-                ? 'bg-amber-50/80 border-amber-200'
-                : 'bg-white border-slate-200'
-            }`}
-          >
-            <div className="flex items-start gap-3.5">
-              <div
-                className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border ${
-                  isSimulation
-                    ? 'bg-amber-100 text-amber-800 border-amber-300'
-                    : 'bg-slate-100 text-slate-600 border-slate-200'
-                }`}
-              >
-                <Eye className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-base font-bold text-slate-900">Mode Simulation</h3>
-                  {isSimulation && (
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-200 text-amber-900 border border-amber-300">
-                      ACTIF
-                    </span>
-                  )}
-                </div>
-                <p className="text-xs text-slate-600 mt-0.5 max-w-xl">
-                  {isSimulation
-                    ? "L'application compare les fichiers avec Microsoft 365 et affiche le bilan complet, mais N'EFFECTUE AUCUNE MODIFICATION réelle sur le tenant."
-                    : "En mode normal, les comptes créés et modifiés seront immédiatement appliqués dans Microsoft 365 et Entra ID."}
-                </p>
-              </div>
-            </div>
-
-            <label className="flex items-center gap-3 cursor-pointer select-none bg-white px-4 py-2.5 rounded-lg border border-slate-200 shadow-xs">
-              <span className="text-xs font-semibold text-slate-700">Activer la simulation</span>
-              <div className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={isSimulation}
-                  onChange={(e) => setIsSimulation(e.target.checked)}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
-              </div>
-            </label>
-          </div>
-
           {/* Preview Counts Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             <div
@@ -1119,15 +1064,11 @@ export const ImportSyncView: React.FC<ImportSyncViewProps> = ({
               type="button"
               id="btn-launch-sync"
               onClick={() => setShowConfirmModal(true)}
-              className={`px-6 py-2.5 rounded-lg text-sm font-semibold shadow-sm flex items-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] ${
-                isSimulation
-                  ? 'bg-amber-600 hover:bg-amber-700 text-white'
-                  : 'bg-emerald-600 hover:bg-emerald-700 text-white'
-              }`}
+              className="px-6 py-2.5 rounded-lg text-sm font-semibold shadow-sm flex items-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] bg-emerald-600 hover:bg-emerald-700 text-white"
             >
               <Play className="w-4 h-4 fill-current" />
               <span>
-                {isSimulation ? 'Lancer la simulation' : 'Lancer la synchronisation'}
+                Lancer la synchronisation
               </span>
             </button>
           </div>
@@ -1137,11 +1078,7 @@ export const ImportSyncView: React.FC<ImportSyncViewProps> = ({
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fadeIn">
               <div className="bg-white border border-slate-200 rounded-xl p-6 max-w-md w-full shadow-xl space-y-4">
                 <div className="flex items-center gap-3">
-                  <div
-                    className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                      isSimulation ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                    }`}
-                  >
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-emerald-50 text-emerald-700 border border-emerald-200">
                     <AlertTriangle className="w-5 h-5" />
                   </div>
                   <div>
@@ -1149,7 +1086,7 @@ export const ImportSyncView: React.FC<ImportSyncViewProps> = ({
                       Confirmation de synchronisation
                     </h3>
                     <span className="text-xs text-slate-500">
-                      {isSimulation ? 'Mode simulation (aucun risque)' : 'Mode production Microsoft 365'}
+                      Mode production Microsoft 365
                     </span>
                   </div>
                 </div>
@@ -1169,11 +1106,9 @@ export const ImportSyncView: React.FC<ImportSyncViewProps> = ({
                       Attribution des licences A1 / A3 correspondantes
                     </li>
                   </ul>
-                  {!isSimulation && (
-                    <p className="text-amber-800 font-semibold pt-1">
-                      ⚠️ Les modifications seront directement appliquées dans votre tenant Microsoft 365.
-                    </p>
-                  )}
+                  <p className="text-amber-800 font-semibold pt-1">
+                    ⚠️ Les modifications seront directement appliquées dans votre tenant Microsoft 365.
+                  </p>
                 </div>
 
                 <div className="flex items-center justify-end gap-3 pt-2">
@@ -1188,11 +1123,7 @@ export const ImportSyncView: React.FC<ImportSyncViewProps> = ({
                     type="button"
                     id="btn-confirm-execute"
                     onClick={handleStartSynchronization}
-                    className={`px-4 py-2 rounded-lg text-xs font-bold text-white shadow-sm ${
-                      isSimulation
-                        ? 'bg-amber-600 hover:bg-amber-700'
-                        : 'bg-emerald-600 hover:bg-emerald-700'
-                    }`}
+                    className="px-4 py-2 rounded-lg text-xs font-bold text-white shadow-sm bg-emerald-600 hover:bg-emerald-700"
                   >
                     Confirmer et exécuter
                   </button>
@@ -1214,7 +1145,7 @@ export const ImportSyncView: React.FC<ImportSyncViewProps> = ({
 
           <div className="space-y-2 max-w-md mx-auto">
             <h3 className="text-xl font-bold text-slate-900">
-              {isSimulation ? 'Simulation en cours...' : 'Synchronisation Microsoft 365 en cours...'}
+              Synchronisation Microsoft 365 en cours...
             </h3>
             <p className="text-xs text-slate-500">{executionStepLabel}</p>
           </div>
@@ -1245,7 +1176,7 @@ export const ImportSyncView: React.FC<ImportSyncViewProps> = ({
               </div>
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-emerald-700">
-                  {isSimulation ? 'Simulation achevée' : 'Synchronisation terminée'}
+                  Synchronisation terminée
                 </span>
                 <h2 className="text-xl font-bold text-slate-900">
                   Traitement des comptes terminé avec succès
@@ -1264,7 +1195,7 @@ export const ImportSyncView: React.FC<ImportSyncViewProps> = ({
                 id="btn-export-csv"
                 onClick={() =>
                   triggerDownload(
-                    exportReportToCsv(previewItems, finalReport.stats, isSimulation),
+                    exportReportToCsv(previewItems, finalReport.stats),
                     `rapport_m365_${Date.now()}.csv`,
                     'text/csv;charset=utf-8;'
                   )
@@ -1279,7 +1210,7 @@ export const ImportSyncView: React.FC<ImportSyncViewProps> = ({
                 id="btn-export-excel"
                 onClick={() =>
                   triggerDownload(
-                    exportReportToExcelXml(previewItems, finalReport.stats, isSimulation),
+                    exportReportToExcelXml(previewItems, finalReport.stats),
                     `rapport_m365_${Date.now()}.xls`,
                     'application/vnd.ms-excel'
                   )

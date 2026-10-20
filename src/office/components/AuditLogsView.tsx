@@ -24,13 +24,12 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({ syncHistory }) => 
   const [selectedRecordId, setSelectedRecordId] = useState<string>('all');
 
   // Flatten all logs from sync history
-  const allLogs: (SyncLogItem & { recordDate: string; isSimulation: boolean })[] = [];
+  const allLogs: (SyncLogItem & { recordDate: string })[] = [];
   syncHistory.forEach((rec) => {
     rec.logs.forEach((log) => {
       allLogs.push({
         ...log,
         recordDate: rec.date,
-        isSimulation: rec.isSimulation,
       });
     });
   });
@@ -51,9 +50,9 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({ syncHistory }) => 
   });
 
   const exportAllLogsCsv = () => {
-    let csv = 'timestamp;utilisateur;email;action;statut;message;mode_simulation\r\n';
+    let csv = 'timestamp;utilisateur;email;action;statut;message\r\n';
     filteredLogs.forEach((l) => {
-      csv += `"${l.timestamp}";"${l.userName}";"${l.userEmail}";"${l.action}";"${l.status}";"${l.message.replace(/"/g, '""')}";${l.isSimulation ? 'OUI' : 'NON'}\r\n`;
+      csv += `"${l.timestamp}";"${l.userName}";"${l.userEmail}";"${l.action}";"${l.status}";"${l.message.replace(/"/g, '""')}"\r\n`;
     });
     triggerDownload(csv, `journal_operations_m365_${Date.now()}.csv`, 'text/csv;charset=utf-8;');
   };
@@ -136,7 +135,6 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({ syncHistory }) => 
               <option value="Création compte">Création compte</option>
               <option value="Modification compte">Modification compte</option>
               <option value="Changement de licence">Changement de licence</option>
-              <option value="Simulation synchronisation">Simulation synchronisation</option>
             </select>
           </div>
         </div>

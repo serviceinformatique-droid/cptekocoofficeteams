@@ -275,7 +275,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 3
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-slate-800">Mode Simulation & Prévisualisation</h3>
+                <h3 className="text-sm font-semibold text-slate-800">Prévisualisation</h3>
                 <p className="text-xs text-slate-500 mt-1">
                   Aperçu clair : 🟢 Créations, 🟠 Modifications, 🟣 Changements de licences.
                 </p>
