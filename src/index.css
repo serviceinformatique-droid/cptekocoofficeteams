@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+/*
+ * Thème « crème & olive » (inspiré du Préparateur CSV KoXo).
+ * Toute l'interface utilise les palettes slate (neutres) et blue (accent) :
+ * on les redéfinit ici, ce qui rhabille tous les écrans sans toucher aux composants.
+ */
+@theme {
+  /* neutres : gris chauds */
+  --color-slate-50: #f9f8f6;
+  --color-slate-100: #f0eeea;
+  --color-slate-200: #e5e2db;
+  --color-slate-300: #d1cdc4;
+  --color-slate-400: #aaa496;
+  --color-slate-500: #8c867a;
+  --color-slate-600: #6f6b62;
+  --color-slate-700: #5f5c55;
+  --color-slate-800: #4f4d47;
+  --color-slate-900: #42413c;
+  --color-slate-950: #2a2926;
+
+  /* accent : vert olive */
+  --color-blue-50: #f6f8ee;
+  --color-blue-100: #e2e8d5;
+  --color-blue-200: #d0d6bf;
+  --color-blue-300: #b3b99a;
+  --color-blue-400: #8f9573;
+  --color-blue-500: #6d6d52;
+  --color-blue-600: #5a5a40;
+  --color-blue-700: #494933;
+  --color-blue-800: #38382a;
+  --color-blue-900: #272720;
+
+  /* succès : vert sauge */
+  --color-emerald-50: #f1f5e6;
+  --color-emerald-100: #e2ebcc;
+  --color-emerald-200: #cddcaa;
+  --color-emerald-500: #7a9340;
+  --color-emerald-600: #637d33;
+  --color-emerald-700: #50662a;
+  --color-emerald-800: #3f5122;
+
+  /* attention : orange pêche */
+  --color-amber-50: #fff0e6;
+  --color-amber-100: #fbe3cf;
+  --color-amber-200: #f5cdab;
+  --color-amber-500: #d68f5a;
+  --color-amber-600: #c47a42;
+  --color-amber-700: #a8622f;
+  --color-amber-800: #86501f;
+
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+}
+
+@layer base {
+  html { background-color: #f9f8f6; }
+  body { color: #42413c; }
+
+  /* titres de pages et gros chiffres : serif italique */
+  h1,
+  .text-2xl.font-bold,
+  .text-3xl.font-bold {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+}

@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  ndm-teams-manager:
+    build: .
+    container_name: ndm_teams_app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - TENANT_ID=${TENANT_ID:-55b01275-e53b-4146-94a3-cb58e71ec7bf}
+      - CLIENT_ID=${CLIENT_ID:-1b4e3135-da49-4e36-9d17-d15d3ab497d3}
+      - CLIENT_SECRET=${CLIENT_SECRET:?CLIENT_SECRET manquant (fichier .env)}
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/api/config"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

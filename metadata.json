@@ -1,0 +1,8 @@
+{
+  "name": "NDM Teams Manager - Gestion Automatique Teams M365",
+  "description": "Application de gestion et synchronisation automatique des équipes Microsoft Teams par classe et matière pour l'Ensemble Scolaire Notre-Dame des Missions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
