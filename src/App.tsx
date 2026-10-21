@@ -577,6 +577,7 @@ export default function App() {
                 users={users}
                 classes={classes}
                 subjects={subjects}
+                teams={teams}
                 onUpdateUser={handleUpdateUser}
                 onPullM365={handlePullM365}
                 isPullingM365={isPullingM365}

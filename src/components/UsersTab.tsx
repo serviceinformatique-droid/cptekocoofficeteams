@@ -22,12 +22,13 @@ import {
   Download,
   Key
 } from 'lucide-react';
-import type { UserItem, ClassItem, SubjectItem } from '../types/index.ts';
+import type { UserItem, ClassItem, SubjectItem, TeamItem } from '../types/index.ts';
 
 interface UsersTabProps {
   users: UserItem[];
   classes: ClassItem[];
   subjects: SubjectItem[];
+  teams: TeamItem[];
   onUpdateUser: (id: string, user: Partial<UserItem>) => void;
   onPullM365: () => void;
   isPullingM365: boolean;
@@ -40,6 +41,7 @@ export const UsersTab: React.FC<UsersTabProps> = ({
   users,
   classes,
   subjects,
+  teams,
   onUpdateUser,
   onPullM365,
   isPullingM365,
@@ -51,6 +53,11 @@ export const UsersTab: React.FC<UsersTabProps> = ({
   const [roleFilter, setRoleFilter] = useState<'all' | 'student' | 'teacher' | 'anomaly'>('all');
   const [classFilter, setClassFilter] = useState<string>('all');
   const [selectedUser, setSelectedUser] = useState<UserItem | null>(null);
+  const classTeams = selectedUser?.classCode
+    ? teams
+        .filter((t) => t.classCode === selectedUser.classCode && t.status !== 'archived')
+        .sort((a, b) => a.name.localeCompare(b.name, 'fr'))
+    : [];
 
   const lyceeSpecialties = [
     'Mathématiques',
@@ -486,18 +493,14 @@ export const UsersTab: React.FC<UsersTabProps> = ({
                 <div className="space-y-1 text-xs">
                   {selectedUser.classCode ? (
                     <>
-                      <div className="p-2 rounded bg-white/60 border border-slate-200 text-slate-700">
-                        {selectedUser.classCode}-Français
-                      </div>
-                      <div className="p-2 rounded bg-white/60 border border-slate-200 text-slate-700">
-                        {selectedUser.classCode}-Histoire-Géographie
-                      </div>
-                      <div className="p-2 rounded bg-white/60 border border-slate-200 text-slate-700">
-                        {selectedUser.classCode}-Anglais
-                      </div>
-                      {selectedUser.specialties?.map((spe) => (
-                        <div key={spe} className="p-2 rounded bg-blue-50 border border-blue-200 text-blue-700 font-bold">
-                          {selectedUser.classCode}-{spe} (Spécialité)
+                      {classTeams.length === 0 && (
+                        <div className="text-slate-500 italic text-xs">
+                          Aucune équipe Teams trouvée pour la classe {selectedUser.classCode}.
+                        </div>
+                      )}
+                      {classTeams.map((t) => (
+                        <div key={t.id} className="p-2 rounded bg-white/60 border border-slate-200 text-slate-700">
+                          {t.name}
                         </div>
                       ))}
                     </>

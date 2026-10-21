@@ -2,7 +2,6 @@ import React from 'react';
 import { 
   Building2, 
   RefreshCw, 
-  Play, 
   ShieldCheck, 
   Menu, 
   X,
@@ -74,15 +73,6 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Quick Action Buttons (Desktop) */}
           <div className="hidden lg:flex items-center gap-2">
             <button
-              onClick={onOpenSimulation}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-medium border border-slate-300 transition"
-              title="Lancer une simulation sans modifier Teams"
-            >
-              <Play className="w-3.5 h-3.5 text-amber-600" />
-              Mode Simulation
-            </button>
-
-            <button
               onClick={onQuickSync}
               disabled={isSyncing}
               className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-xs font-semibold shadow-md shadow-blue-600/25 transition disabled:opacity-50"
@@ -94,13 +84,6 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Mobile menu button */}
           <div className="flex lg:hidden items-center gap-2">
-            <button
-              onClick={onOpenSimulation}
-              className="p-1.5 rounded-lg bg-slate-100 text-amber-600 border border-slate-300"
-              title="Mode Simulation"
-            >
-              <Play className="w-4 h-4" />
-            </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 focus:outline-none"
@@ -143,15 +126,6 @@ export const Header: React.FC<HeaderProps> = ({
       {mobileMenuOpen && (
         <div className="lg:hidden border-t border-slate-200 bg-white px-4 pt-2 pb-4 space-y-1">
           <div className="flex gap-2 py-2 mb-2 border-b border-slate-200">
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenSimulation();
-              }}
-              className="flex-1 py-2 rounded-lg bg-slate-100 text-amber-600 text-xs font-semibold flex items-center justify-center gap-1 border border-slate-300"
-            >
-              <Play className="w-3.5 h-3.5" /> Simulation
-            </button>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
